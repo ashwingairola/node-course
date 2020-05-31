@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { ErrorController } from '../controllers/error.js';
+import { ErrorController } from '../controllers/ErrorController.js';
 
 const router = express.Router();
 
