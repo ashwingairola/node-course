@@ -3,7 +3,7 @@
 	"plugins": ["prettier"],
 	"env": { "node": true },
 	"parser": "babel-eslint",
-	"parserOptions": { "sourceType": "module", "ecmaVersion": 2018 },
+	"parserOptions": { "sourceType": "module", "ecmaVersion": 2019 },
 	"rules": {
 		"prettier/prettier": [
 			"warn",
@@ -11,6 +11,7 @@
 				"endOfLine": "auto"
 			}
 		],
-		"no-unused-vars": "warn"
+		"no-unused-vars": "warn",
+		"no-undef": "error"
 	}
 }
