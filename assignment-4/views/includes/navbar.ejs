@@ -1,0 +1,16 @@
+<header class="navbar bg-primary">
+	<nav class="navbar__nav">
+		<ul class="navbar__item-list">
+			<li class="navbar__item">
+				<a class="text-secondary <%= path === '/' ? 'navbar__item--active' : '' %>" href="/">
+					Home
+				</a>
+			</li>
+			<li class="navbar__item">
+				<a class="text-secondary <%= path === '/users' ? 'navbar__item--active' : '' %>" href="/users">
+					Users
+				</a>
+			</li>
+		</ul>
+	</nav>
+</header>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<%- include('includes/head.ejs') %>
+	</head>
+
+	<body class="bg-app">
+		<%- include('includes/navbar.ejs') %>
+		<main class="main">
+			<h1>Add a User</h1>
+
+			<form action="/users/" method="post">
+				<label for="username">Username</label>
+				<input class="input" type="text" name="username" id="username" />
+				<button class="button bg-primary" type="submit">Add User</button>
+			</form>
+		</main>
+	</body>
+
+</html>
