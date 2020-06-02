@@ -1,8 +1,8 @@
-export class ProductsController {
-	static #products = [];
+import { Product } from '../models/Product.js';
 
+export class ProductsController {
 	static getAddProduct(req, res) {
-		res.render('add-product', {
+		res.render('admin/add-product', {
 			pageTitle: 'Add Product',
 			path: '/admin/add-product',
 			activeProducts: true,
@@ -12,18 +12,21 @@ export class ProductsController {
 	}
 
 	static postAddProduct(req, res) {
-		ProductsController.#products.push({ title: req.body.title });
+		const product = new Product(req.body.title);
+		product.save();
 		res.redirect('/');
 	}
 
 	static getProducts(req, res) {
-		res.render('shop', {
-			products: ProductsController.#products,
-			pageTitle: 'Shop',
-			path: '/',
-			hasProducts: !!ProductsController.#products.length,
-			activeShop: true,
-			productCSS: true
+		Product.fetchAll(products => {
+			res.render('shop/product-list', {
+				products,
+				pageTitle: 'Shop',
+				path: '/',
+				hasProducts: !!products.length,
+				activeShop: true,
+				productCSS: true
+			});
 		});
 	}
 }

@@ -12,6 +12,15 @@
 			}
 		],
 		"no-unused-vars": "warn",
-		"no-undef": "error"
+		"no-undef": "error",
+		"no-const-assign": "error",
+		"no-var": "error",
+		"no-dupe-args": "error",
+		"no-else-return": "warn",
+		"no-useless-return": "warn",
+		"no-shadow": "warn",
+		"no-empty": "warn",
+		"no-invalid-this": "error",
+		"no-undefined": "error"
 	}
 }
