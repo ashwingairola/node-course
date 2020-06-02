@@ -10,15 +10,22 @@ const getProductsFromFile = callback => {
 			return callback([]);
 		}
 
-		callback(JSON.parse(content));
+		try {
+			callback(JSON.parse(content));
+		} catch (e) {
+			return callback([]);
+		}
 	});
 };
 
 export class Product {
 	static #products = [];
 
-	constructor(title) {
+	constructor(title, imageUrl, description, price) {
 		this.title = title;
+		this.imageUrl = imageUrl;
+		this.description = description;
+		this.price = price;
 	}
 
 	save() {
