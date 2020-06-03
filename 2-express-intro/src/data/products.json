@@ -1,1 +1,16 @@
-[{"title":"Dune by Frank Herbert","imageUrl":"https://images-na.ssl-images-amazon.com/images/I/81BJ3OD3J-L.jpg","description":"Dune is a 1965 science fiction novel by American author Frank Herbert, originally published as two separate serials in Analog magazine. It tied with Roger Zelazny's This Immortal for the Hugo Award in 1966, and it won the inaugural Nebula Award for Best Novel. It is the first installment of the Dune saga, and in 2003 was cited as the world's best-selling science fiction novel.","price":"399"}]
+[
+	{
+		"title": "Dune by Frank Herbert",
+		"imageUrl": "https://images-na.ssl-images-amazon.com/images/I/81BJ3OD3J-L.jpg",
+		"description": "Set on the desert planet Arrakis, Dune is the story of the boy Paul Atreides, heir to a noble family tasked with ruling an inhospitable world where the only thing of value is the \"spice\" melange, a drug capable of extending life and enhancing consciousness. Coveted across the known universe, melange is a prize worth killing for...",
+		"price": 399,
+		"id": "0.5650338886382673"
+	},
+	{
+		"title": "The Stars My Destination by Alfred Bester",
+		"imageUrl": "https://images-na.ssl-images-amazon.com/images/I/81IGtYO+d6L.jpg",
+		"description": "In this pulse-quickening novel, Alfred Bester imagines a future in which people \"jaunte\" a thousand miles with a single thought, where the rich barricade themselves in labyrinths and protect themselves with radioactive hit men — and where an inarticulate outcast is the most valuable and dangerous man alive.",
+		"price": 499,
+		"id": "0.1733336031500181"
+	}
+]

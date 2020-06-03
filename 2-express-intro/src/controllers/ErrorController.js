@@ -5,4 +5,11 @@ export class ErrorController {
 			path: ''
 		});
 	}
+
+	static getProductNotFound(req, res) {
+		res.status(500).render('error/product-not-found', {
+			pageTitle: 'Product Not Found',
+			path: ''
+		});
+	}
 }

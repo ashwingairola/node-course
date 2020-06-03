@@ -1,5 +1,4 @@
 import fs from 'fs';
-import url from 'url';
 import path from 'path';
 
 const filePath = path.join('src', 'data', 'products.json');
@@ -29,6 +28,7 @@ export class Product {
 	}
 
 	save() {
+		this.id = Math.random().toString();
 		getProductsFromFile(products => {
 			products.push(this);
 			fs.writeFile(filePath, JSON.stringify(products), e => {
@@ -39,5 +39,12 @@ export class Product {
 
 	static fetchAll(callback) {
 		getProductsFromFile(callback);
+	}
+
+	static findById(id, callback) {
+		getProductsFromFile(products => {
+			const product = products.find(prod => prod.id === id);
+			callback(product);
+		});
 	}
 }

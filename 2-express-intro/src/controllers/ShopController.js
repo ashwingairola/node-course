@@ -1,4 +1,5 @@
 import { Product } from '../models/Product.js';
+import { Cart } from '../models/Cart.js';
 
 export class ShopController {
 	static getProducts(req, res) {
@@ -8,6 +9,25 @@ export class ShopController {
 				pageTitle: 'Products',
 				path: '/products'
 			});
+		});
+	}
+
+	static getProduct(req, res) {
+		const { productId } = req.params;
+
+		Product.findById(productId, product => {
+			if (product) {
+				res.render('shop/product-detail', {
+					product,
+					pageTitle: product.title,
+					path: '/products'
+				});
+			} else {
+				res.render('error/404', {
+					pageTitle: 'Page Not Found',
+					path: ''
+				});
+			}
 		});
 	}
 
@@ -25,6 +45,21 @@ export class ShopController {
 		res.render('shop/cart', {
 			pageTitle: 'Cart',
 			path: '/cart'
+		});
+	}
+
+	static postCart(req, res) {
+		const productId = req.body.productId.trim();
+
+		Cart.addProduct(productId, err => {
+			if (err) {
+				return res.redirect(302, '/error/product-not-found');
+			}
+
+			res.render('shop/cart', {
+				pageTitle: 'Cart',
+				path: '/cart'
+			});
 		});
 	}
 
