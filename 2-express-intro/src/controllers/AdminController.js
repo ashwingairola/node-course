@@ -2,12 +2,11 @@ import { Product } from '../models/Product.js';
 
 export class AdminController {
 	static getAddProduct(req, res) {
-		res.render('admin/add-product', {
+		res.render('admin/edit-product', {
 			pageTitle: 'Add Product',
 			path: '/admin/add-product',
-			activeProducts: true,
-			productCSS: true,
-			formsCSS: true
+			editing: false,
+			product: null
 		});
 	}
 
@@ -22,7 +21,47 @@ export class AdminController {
 		res.redirect('/');
 	}
 
-	static getProducts(req, res, next) {
+	static getEditProduct(req, res) {
+		const editMode = req.query.edit === 'true' ? true : false;
+		if (!editMode) {
+			res.redirect(301, '/');
+		}
+
+		const productId = req.params.productId.trim();
+
+		Product.findById(productId, product => {
+			if (!product) {
+				return res.redirect(302, 'error/product-not-found', {
+					pageTitle: 'Product Not Found'
+				});
+			}
+
+			res.render('admin/edit-product', {
+				pageTitle: 'Edit Product',
+				path: '/admin/edit-product',
+				editing: editMode,
+				product
+			});
+		});
+	}
+
+	static postEditProduct(req, res) {
+		const { id, title, price, imageUrl, description } = req.body;
+		const product = new Product(title, imageUrl, description, +price, id);
+		product.edit(() => {
+			res.redirect('/admin/products');
+		});
+	}
+
+	static postDeleteProduct(req, res) {
+		const productId = req.body.id;
+
+		Product.delete(productId, () => {
+			res.redirect('/admin/products');
+		});
+	}
+
+	static getProducts(req, res) {
 		Product.fetchAll(products => {
 			res.render('admin/products', {
 				products,
