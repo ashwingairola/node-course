@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { Cart } from './Cart.js';
+
 export class Product {
 	static #products = [];
 	static #filePath = path.join('src', 'data', 'products.json');
@@ -47,14 +49,20 @@ export class Product {
 		});
 	}
 
-	static delete(productId, callback) {
+	static deleteById(productId, callback) {
 		Product.#getProductsFromFile(products => {
 			products = products.filter(product => product.id !== productId);
 
-			fs.writeFile(Product.#filePath, JSON.stringify(products), () => {
-				if (callback) {
-					callback();
+			fs.writeFile(Product.#filePath, JSON.stringify(products), err => {
+				if (!err) {
+					return Cart.deleteProduct(productId, () => {
+						callback();
+					});
 				}
+
+				callback(
+					new Error('An error occurred while writing to the file.')
+				);
 			});
 		});
 	}

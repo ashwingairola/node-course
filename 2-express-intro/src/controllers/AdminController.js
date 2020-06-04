@@ -56,7 +56,7 @@ export class AdminController {
 	static postDeleteProduct(req, res) {
 		const productId = req.body.id;
 
-		Product.delete(productId, () => {
+		Product.deleteById(productId, () => {
 			res.redirect('/admin/products');
 		});
 	}

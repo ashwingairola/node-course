@@ -3,19 +3,11 @@ import path from 'path';
 
 import { Product } from './Product.js';
 
-const filePath = path.join('src', 'data', 'cart.json');
-
 export class Cart {
-	static addProduct(id, callback) {
-		// Fetch the previous cart.
-		fs.readFile(filePath, (err, content) => {
-			let cart = { products: [], totalPrice: 0 };
-			if (!err) {
-				try {
-					cart = JSON.parse(content);
-				} catch (e) {}
-			}
+	static #filePath = path.join('src', 'data', 'cart.json');
 
+	static addProduct(id, callback) {
+		Cart.#getCartFromFile(cart => {
 			// Analyse the cart => find existing product.
 			const existingProduct = cart.products.find(prod => prod.id === id);
 
@@ -38,19 +30,49 @@ export class Cart {
 					Cart.#updateCartFile(cart, callback);
 				});
 			}
-
 			Cart.#updateCartFile(cart, callback);
 		});
 	}
 
+	static deleteProduct(productId, callback) {
+		Cart.#getCartFromFile(cart => {
+			const product = cart.products.find(prod => prod.id === productId);
+
+			if (!product) {
+				return callback(new Error('Product not found'));
+			}
+
+			cart.totalPrice -= product.price * product.qty;
+			cart.products = cart.products.filter(prod => prod.id !== productId);
+
+			fs.writeFile(Cart.#filePath, JSON.stringify(cart), () => {
+				callback();
+			});
+		});
+	}
+
 	static #updateCartFile = (cartData, callback) => {
-		fs.writeFile(filePath, JSON.stringify(cartData), e => {
+		fs.writeFile(Cart.#filePath, JSON.stringify(cartData), e => {
 			if (e) {
 				return callback(
 					new Error('An error occured while saving the cart.')
 				);
 			}
 			callback();
+		});
+	};
+
+	static #getCartFromFile = callback => {
+		fs.readFile(Cart.#filePath, (err, content) => {
+			if (err) {
+				return callback({ products: [], totalPrice: 0 });
+			}
+
+			try {
+				callback(JSON.parse(content));
+			} catch (e) {
+				callback({ products: [], totalPrice: 0 });
+			}
 		});
 	};
 }

@@ -53,13 +53,25 @@ export class ShopController {
 
 		Cart.addProduct(productId, err => {
 			if (err) {
-				return res.redirect(302, '/error/product-not-found');
+				return res.redirect(404, '/error/product-not-found');
 			}
 
 			res.render('shop/cart', {
 				pageTitle: 'Cart',
 				path: '/cart'
 			});
+		});
+	}
+
+	static postDeleteCart(req, res) {
+		const productId = req.body.productId;
+
+		Cart.deleteProduct(productId, err => {
+			if (err) {
+				return res.redirect(404, '/error/product-not-found');
+			}
+
+			res.redirect('/shop/cart');
 		});
 	}
 
