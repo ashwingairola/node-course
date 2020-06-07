@@ -41,10 +41,29 @@ export class ShopController {
 		});
 	}
 
-	static getCart(req, res, next) {
-		res.render('shop/cart', {
-			pageTitle: 'Cart',
-			path: '/cart'
+	static getCart(req, res) {
+		Cart.getCart(cart => {
+			Product.fetchAll(products => {
+				const cartProducts = [];
+
+				products.forEach(product => {
+					const cartProductData = cart.products.find(
+						prod => prod.id === product.id
+					);
+					if (cartProductData) {
+						cartProducts.push({
+							productData: product,
+							qty: cartProductData.qty
+						});
+					}
+				});
+
+				res.render('shop/cart', {
+					pageTitle: 'Cart',
+					path: '/cart',
+					products: cartProducts
+				});
+			});
 		});
 	}
 
@@ -56,10 +75,7 @@ export class ShopController {
 				return res.redirect(404, '/error/product-not-found');
 			}
 
-			res.render('shop/cart', {
-				pageTitle: 'Cart',
-				path: '/cart'
-			});
+			res.redirect('/cart');
 		});
 	}
 
@@ -71,7 +87,7 @@ export class ShopController {
 				return res.redirect(404, '/error/product-not-found');
 			}
 
-			res.redirect('/shop/cart');
+			res.redirect('/cart');
 		});
 	}
 

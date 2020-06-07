@@ -6,8 +6,22 @@ import { Product } from './Product.js';
 export class Cart {
 	static #filePath = path.join('src', 'data', 'cart.json');
 
+	static getCart = callback => {
+		fs.readFile(Cart.#filePath, (err, content) => {
+			if (err) {
+				return callback({ products: [], totalPrice: 0 });
+			}
+
+			try {
+				callback(JSON.parse(content));
+			} catch (e) {
+				callback({ products: [], totalPrice: 0 });
+			}
+		});
+	};
+
 	static addProduct(id, callback) {
-		Cart.#getCartFromFile(cart => {
+		Cart.getCart(cart => {
 			// Analyse the cart => find existing product.
 			const existingProduct = cart.products.find(prod => prod.id === id);
 
@@ -35,7 +49,7 @@ export class Cart {
 	}
 
 	static deleteProduct(productId, callback) {
-		Cart.#getCartFromFile(cart => {
+		Cart.getCart(cart => {
 			const product = cart.products.find(prod => prod.id === productId);
 
 			if (!product) {
@@ -59,20 +73,6 @@ export class Cart {
 				);
 			}
 			callback();
-		});
-	};
-
-	static #getCartFromFile = callback => {
-		fs.readFile(Cart.#filePath, (err, content) => {
-			if (err) {
-				return callback({ products: [], totalPrice: 0 });
-			}
-
-			try {
-				callback(JSON.parse(content));
-			} catch (e) {
-				callback({ products: [], totalPrice: 0 });
-			}
 		});
 	};
 }
