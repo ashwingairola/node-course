@@ -3,13 +3,17 @@ import { Cart } from '../models/Cart.js';
 
 export class ShopController {
 	static getProducts(req, res) {
-		Product.fetchAll(products => {
-			res.render('shop/product-list', {
-				products,
-				pageTitle: 'Products',
-				path: '/products'
+		Product.fetchAll()
+			.then(([rows]) => {
+				res.render('shop/product-list', {
+					products: rows,
+					pageTitle: 'Products',
+					path: '/products'
+				});
+			})
+			.catch(err => {
+				console.log(err);
 			});
-		});
 	}
 
 	static getProduct(req, res) {
@@ -31,14 +35,18 @@ export class ShopController {
 		});
 	}
 
-	static getIndex(req, res, next) {
-		Product.fetchAll(products => {
-			res.render('shop/index', {
-				products,
-				pageTitle: 'Shop',
-				path: '/'
+	static getIndex(req, res) {
+		Product.fetchAll()
+			.then(([rows]) => {
+				res.render('shop/index', {
+					products: rows,
+					pageTitle: 'Shop',
+					path: '/'
+				});
+			})
+			.catch(err => {
+				console.log(err);
 			});
-		});
 	}
 
 	static getCart(req, res) {

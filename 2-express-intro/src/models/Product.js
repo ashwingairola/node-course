@@ -1,11 +1,8 @@
-import fs from 'fs';
-import path from 'path';
-
+import { CONNECTION_POOL as db } from '../util/database.js';
 import { Cart } from './Cart.js';
 
 export class Product {
 	static #products = [];
-	static #filePath = path.join('src', 'data', 'products.json');
 
 	constructor(title, imageUrl, description, price, id) {
 		this.title = title;
@@ -15,80 +12,15 @@ export class Product {
 		this.id = id;
 	}
 
-	save(callback) {
-		this.id = Math.random().toString();
+	save() {}
 
-		Product.#getProductsFromFile(products => {
-			products.push(this);
-			fs.writeFile(Product.#filePath, JSON.stringify(products), () => {
-				if (callback) {
-					callback();
-				}
-			});
-		});
+	edit() {}
+
+	static deleteById(productId) {}
+
+	static fetchAll() {
+		return db.execute('SELECT * FROM products;');
 	}
 
-	edit(callback) {
-		Product.#getProductsFromFile(products => {
-			const existingProductIndex = products.findIndex(
-				prod => prod.id === this.id
-			);
-
-			const updatedProducts = [...products];
-			updatedProducts[existingProductIndex] = this;
-
-			fs.writeFile(
-				Product.#filePath,
-				JSON.stringify(updatedProducts),
-				() => {
-					if (callback) {
-						callback();
-					}
-				}
-			);
-		});
-	}
-
-	static deleteById(productId, callback) {
-		Product.#getProductsFromFile(products => {
-			products = products.filter(product => product.id !== productId);
-
-			fs.writeFile(Product.#filePath, JSON.stringify(products), err => {
-				if (!err) {
-					return Cart.deleteProduct(productId, () => {
-						callback();
-					});
-				}
-
-				callback(
-					new Error('An error occurred while writing to the file.')
-				);
-			});
-		});
-	}
-
-	static fetchAll(callback) {
-		Product.#getProductsFromFile(callback);
-	}
-
-	static findById(id, callback) {
-		Product.#getProductsFromFile(products => {
-			const product = products.find(prod => prod.id === id);
-			callback(product);
-		});
-	}
-
-	static #getProductsFromFile = callback => {
-		fs.readFile(Product.#filePath, (err, content) => {
-			if (err) {
-				return callback([]);
-			}
-
-			try {
-				callback(JSON.parse(content));
-			} catch (e) {
-				return callback([]);
-			}
-		});
-	};
+	static findById(id) {}
 }
