@@ -7,13 +7,15 @@
 	"type": "module",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "nodemon src/app.js",
+		"start": "npm run start:dev",
+		"start:dev": "nodemon -r dotenv/config src/app.js dotenv_config_path=./config/.env.dev",
 		"prettier:all": "prettier --write \"**/*.(js|pug|html|css)\" --plugin=@prettier/plugin-pug --plugin-search-dir=node_modules"
 	},
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
 		"body-parser": "^1.19.0",
+		"dotenv": "^8.2.0",
 		"ejs": "^3.1.3",
 		"express": "^4.17.1",
 		"mysql2": "^2.1.0",
