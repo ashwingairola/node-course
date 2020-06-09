@@ -17,8 +17,15 @@ export class AdminController {
 		const description = req.body.description;
 
 		const product = new Product(title, imageUrl, description, price);
-		product.save();
-		res.redirect('/');
+		product
+			.save()
+			.then(() => {
+				res.redirect('/');
+			})
+			.catch(err => {
+				console.log(err);
+				res.redirect('/error/product-not-found');
+			});
 	}
 
 	static getEditProduct(req, res) {

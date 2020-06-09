@@ -1,1 +1,30 @@
-[{"title":"Dune by Frank Herbert","imageUrl":"https://images-na.ssl-images-amazon.com/images/I/81BJ3OD3J-L.jpg","description":"Set on the desert planet Arrakis, Dune is the story of the boy Paul Atreides, heir to a noble family tasked with ruling an inhospitable world where the only thing of value is the \"spice\" melange, a drug capable of extending life and enhancing consciousness. Coveted across the known universe, melange is a prize worth killing for...","price":399,"id":"0.5650338886382673"},{"title":"The Stars My Destination by Alfred Bester","imageUrl":"https://images-na.ssl-images-amazon.com/images/I/81IGtYO+d6L.jpg","description":"In this pulse-quickening novel, Alfred Bester imagines a future in which people \"jaunte\" a thousand miles with a single thought, where the rich barricade themselves in labyrinths and protect themselves with radioactive hit men — and where an inarticulate outcast is the most valuable and dangerous man alive.","price":499,"id":"0.1733336031500181"},{"title":"The Dark Tower by Stephen King","imageUrl":"https://m.media-amazon.com/images/I/51RsxrxeZ4L.jpg","description":"The seventh and final installment of Stephen King's The Dark Tower saga is perhaps the most anticipated book in the author's long career. King began this epic tale about the last gunslinger in the world more than 20 years ago; now he draws its suspenseful story to a close, snapping together the last pieces of his action puzzle and drawing Roland Deschain ever closer to his ultimate goal. \r\n\t\t\t\t\t","price":375,"id":"0.00343562850629886"},{"title":"Catch-22 by Joseph Heller","imageUrl":"https://m.media-amazon.com/images/I/41qyB+JNkyL.jpg","description":"The novel is set during World War II, from 1942 to 1944. It mainly follows the life of Captain John Yossarian, a U.S. Army Air Forces B-25 bombardier. Most of the events in the book occur while the fictional 256th Squadron is based on the island of Pianosa, in the Mediterranean Sea, west of Italy. The novel looks into the experiences of Yossarian and the other airmen in the camp, who attempt to maintain their sanity while fulfilling their service requirements so that they may return home. \r\n\t\t\t\t\t","price":295,"id":"0.5048640167673482"}]
+[
+	{
+		"title": "Dune by Frank Herbert",
+		"imageUrl": "https://images-na.ssl-images-amazon.com/images/I/81BJ3OD3J-L.jpg",
+		"description": "Set on the desert planet Arrakis, Dune is the story of the boy Paul Atreides, heir to a noble family tasked with ruling an inhospitable world where the only thing of value is the \"spice\" melange, a drug capable of extending life and enhancing consciousness. Coveted across the known universe, melange is a prize worth killing for...",
+		"price": 399,
+		"id": "0.5650338886382673"
+	},
+	{
+		"title": "The Stars My Destination by Alfred Bester",
+		"imageUrl": "https://images-na.ssl-images-amazon.com/images/I/81IGtYO+d6L.jpg",
+		"description": "In this pulse-quickening novel, Alfred Bester imagines a future in which people \"jaunte\" a thousand miles with a single thought, where the rich barricade themselves in labyrinths and protect themselves with radioactive hit men — and where an inarticulate outcast is the most valuable and dangerous man alive.",
+		"price": 499,
+		"id": "0.1733336031500181"
+	},
+	{
+		"title": "The Dark Tower by Stephen King",
+		"imageUrl": "https://m.media-amazon.com/images/I/51RsxrxeZ4L.jpg",
+		"description": "The seventh and final installment of Stephen King's The Dark Tower saga is perhaps the most anticipated book in the author's long career. King began this epic tale about the last gunslinger in the world more than 20 years ago; now he draws its suspenseful story to a close, snapping together the last pieces of his action puzzle and drawing Roland Deschain ever closer to his ultimate goal.",
+		"price": 375,
+		"id": "0.00343562850629886"
+	},
+	{
+		"title": "Catch-22 by Joseph Heller",
+		"imageUrl": "https://m.media-amazon.com/images/I/41qyB+JNkyL.jpg",
+		"description": "The novel is set during World War II, from 1942 to 1944. It mainly follows the life of Captain John Yossarian, a U.S. Army Air Forces B-25 bombardier. Most of the events in the book occur while the fictional 256th Squadron is based on the island of Pianosa, in the Mediterranean Sea, west of Italy. The novel looks into the experiences of Yossarian and the other airmen in the camp, who attempt to maintain their sanity while fulfilling their service requirements so that they may return home. \r\n\t\t\t\t\t",
+		"price": 295,
+		"id": "0.5048640167673482"
+	}
+]

@@ -19,20 +19,23 @@ export class ShopController {
 	static getProduct(req, res) {
 		const { productId } = req.params;
 
-		Product.findById(productId, product => {
-			if (product) {
-				res.render('shop/product-detail', {
-					product,
-					pageTitle: product.title,
-					path: '/products'
-				});
-			} else {
-				res.render('error/404', {
-					pageTitle: 'Page Not Found',
-					path: ''
-				});
-			}
-		});
+		Product.findById(productId)
+			.then(data => {
+				const product = data[0][0];
+				if (product) {
+					res.render('shop/product-detail', {
+						product,
+						pageTitle: product.title,
+						path: '/products'
+					});
+				} else {
+					throw new Error('Product not found.');
+				}
+			})
+			.catch(err => {
+				console.log(err);
+				res.redirect('/error/product-not-found');
+			});
 	}
 
 	static getIndex(req, res) {
