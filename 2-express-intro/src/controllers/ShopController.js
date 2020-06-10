@@ -3,29 +3,29 @@ import { Cart } from '../models/Cart.js';
 
 export class ShopController {
 	static getProducts(req, res) {
-		Product.fetchAll()
-			.then(([rows]) => {
+		Product.findAll()
+			.then(result => {
 				res.render('shop/product-list', {
-					products: rows,
+					products: result,
 					pageTitle: 'Products',
 					path: '/products'
 				});
 			})
 			.catch(err => {
-				console.log(err);
+				console.error(err);
+				res.redirect('/error/product-not-found');
 			});
 	}
 
 	static getProduct(req, res) {
 		const { productId } = req.params;
 
-		Product.findById(productId)
-			.then(data => {
-				const product = data[0][0];
-				if (product) {
+		Product.findByPk(productId)
+			.then(result => {
+				if (result) {
 					res.render('shop/product-detail', {
-						product,
-						pageTitle: product.title,
+						product: result,
+						pageTitle: result.title,
 						path: '/products'
 					});
 				} else {
@@ -39,17 +39,16 @@ export class ShopController {
 	}
 
 	static getIndex(req, res) {
-		Product.fetchAll()
-			.then(([rows]) => {
-				res.render('shop/index', {
-					products: rows,
-					pageTitle: 'Shop',
-					path: '/'
-				});
-			})
-			.catch(err => {
-				console.log(err);
+		Product.findAll().then(results => {
+			res.render('shop/index', {
+				products: results,
+				pageTitle: 'Shop',
+				path: '/'
+			}).catch(err => {
+				console.error(err);
+				res.redirect('/error/page-not-found');
 			});
+		});
 	}
 
 	static getCart(req, res) {

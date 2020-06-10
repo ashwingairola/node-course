@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import adminRouter from './routes/admin.js';
 import shopRouter from './routes/shop.js';
 import errorRouter from './routes/error.js';
-import { CONNECTION_POOL as db } from './util/database.js';
+import { SEQUELIZE } from './util/database.js';
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,6 +35,10 @@ app.use((req, res) => {
 	res.status(302).redirect('/error/page-not-found');
 });
 
+SEQUELIZE.sync().catch(err => {
+	console.log(err);
+});
+
 const server = app.listen(process.env.SERVER_PORT);
 
 server.on('listening', () => {
@@ -43,5 +47,4 @@ server.on('listening', () => {
 
 server.on('close', () => {
 	console.log('Shutting down.');
-	db.end();
 });

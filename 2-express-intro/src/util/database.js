@@ -1,10 +1,9 @@
-import mysql from 'mysql2';
+import Sequelize from 'sequelize';
 
-export const CONNECTION_POOL = mysql
-	.createPool({
-		host: process.env.DB_HOST,
-		database: process.env.DB_NAME,
-		user: process.env.DB_USER,
-		password: process.env.DB_PASSWORD
-	})
-	.promise();
+export const SEQUELIZE = new Sequelize.Sequelize({
+	host: process.env.DB_HOST,
+	username: process.env.DB_USER,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_NAME,
+	dialect: 'mysql'
+});

@@ -1,33 +1,28 @@
-import { CONNECTION_POOL as db } from '../util/database.js';
-import { Cart } from './Cart.js';
+import Sequelize from 'sequelize';
 
-export class Product {
-	static #products = [];
+import { SEQUELIZE } from '../util/database.js';
 
-	constructor(title, imageUrl, description, price, id) {
-		this.title = title;
-		this.imageUrl = imageUrl;
-		this.description = description;
-		this.price = price;
-		this.id = id;
+export const Product = SEQUELIZE.define('product', {
+	id: {
+		type: Sequelize.INTEGER,
+		autoIncrement: true,
+		allowNull: false,
+		primaryKey: true
+	},
+	title: {
+		type: Sequelize.STRING,
+		allowNull: false
+	},
+	price: {
+		type: Sequelize.DOUBLE,
+		allowNull: false
+	},
+	imageUrl: {
+		type: Sequelize.STRING,
+		allowNull: false
+	},
+	description: {
+		type: Sequelize.TEXT,
+		allowNull: false
 	}
-
-	save() {
-		const { title, price, description, imageUrl } = this;
-		const statement = `INSERT INTO products (title, price, description, imageUrl) VALUES(?, ?, ?, ?);`;
-
-		return db.execute(statement, [title, price, description, imageUrl]);
-	}
-
-	edit() {}
-
-	static deleteById(productId) {}
-
-	static fetchAll() {
-		return db.execute('SELECT * FROM products;');
-	}
-
-	static findById(id) {
-		return db.execute('SELECT * FROM products WHERE id=?', [id]);
-	}
-}
+});

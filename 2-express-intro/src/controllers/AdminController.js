@@ -16,11 +16,15 @@ export class AdminController {
 		const price = +req.body.price;
 		const description = req.body.description;
 
-		const product = new Product(title, imageUrl, description, price);
-		product
-			.save()
-			.then(() => {
-				res.redirect('/');
+		Product.create({
+			title,
+			imageUrl,
+			price,
+			description
+		})
+			.then(result => {
+				console.log(result);
+				res.redirect('/products');
 			})
 			.catch(err => {
 				console.log(err);
