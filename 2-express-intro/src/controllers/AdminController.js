@@ -22,8 +22,7 @@ export class AdminController {
 			price,
 			description
 		})
-			.then(result => {
-				console.log(result);
+			.then(() => {
 				res.redirect('/products');
 			})
 			.catch(err => {
@@ -38,47 +37,69 @@ export class AdminController {
 			res.redirect(301, '/');
 		}
 
-		const productId = req.params.productId.trim();
+		const productId = req.params.productId;
 
-		Product.findById(productId, product => {
-			if (!product) {
-				return res.redirect(302, 'error/product-not-found', {
-					pageTitle: 'Product Not Found'
+		Product.findByPk(productId)
+			.then(result => {
+				if (!result) {
+					throw new Error('Product not found.');
+				}
+
+				res.render('admin/edit-product', {
+					pageTitle: 'Edit Product',
+					path: '/admin/edit-product',
+					editing: editMode,
+					product: result
 				});
-			}
-
-			res.render('admin/edit-product', {
-				pageTitle: 'Edit Product',
-				path: '/admin/edit-product',
-				editing: editMode,
-				product
+			})
+			.catch(err => {
+				console.log(err);
+				return res.redirect('error/product-not-found');
 			});
-		});
 	}
 
 	static postEditProduct(req, res) {
-		const { id, title, price, imageUrl, description } = req.body;
-		const product = new Product(title, imageUrl, description, +price, id);
-		product.edit(() => {
-			res.redirect('/admin/products');
-		});
+		const { id, title, imageUrl, description } = req.body;
+		const price = +req.body.price;
+
+		Product.update(
+			{ title, price, imageUrl, description },
+			{ where: { id } }
+		)
+			.then(() => {
+				res.redirect('/admin/products');
+			})
+			.catch(err => {
+				console.error(err);
+				res.redirect('/error/product-not-found');
+			});
 	}
 
 	static postDeleteProduct(req, res) {
 		const productId = req.body.id;
 
-		Product.deleteById(productId, () => {
-			res.redirect('/admin/products');
-		});
+		Product.destroy({ where: { id: productId } })
+			.then(() => {
+				res.redirect('/admin/products');
+			})
+			.catch(err => {
+				console.error(err);
+				res.redirect('/error/product-not-found');
+			});
 	}
 
 	static getProducts(req, res) {
-		Product.fetchAll(products => {
-			res.render('admin/products', {
-				products,
-				pageTitle: 'Admin Products',
-				path: '/admin/products'
+		Product.findAll()
+			.then(results => {
+				res.render('admin/products', {
+					products: results,
+					pageTitle: 'Admin Products',
+					path: '/admin/products'
+				});
+			})
+			.catch(err => {
+				console.error(err);
+				res.redirect('/error/product-not-found');
 			});
-		});
 	}
 }
