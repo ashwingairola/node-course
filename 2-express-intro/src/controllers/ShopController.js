@@ -1,5 +1,6 @@
 import { Product } from '../models/Product.js';
 import { Cart } from '../models/Cart.js';
+import { CartItem } from '../models/CartItem.js';
 
 export class ShopController {
 	static getProducts(req, res) {
@@ -39,66 +40,107 @@ export class ShopController {
 	}
 
 	static getIndex(req, res) {
-		Product.findAll().then(results => {
-			res.render('shop/index', {
-				products: results,
-				pageTitle: 'Shop',
-				path: '/'
-			}).catch(err => {
+		Product.findAll()
+			.then(results => {
+				res.render('shop/index', {
+					products: results,
+					pageTitle: 'Shop',
+					path: '/'
+				});
+			})
+			.catch(err => {
 				console.error(err);
 				res.redirect('/error/page-not-found');
 			});
-		});
 	}
 
 	static getCart(req, res) {
-		Cart.getCart(cart => {
-			Product.fetchAll(products => {
-				const cartProducts = [];
+		req.user
+			.getCart()
+			.then(cart => {
+				if (!cart) {
+					throw new Error('Cart not found.');
+				}
 
-				products.forEach(product => {
-					const cartProductData = cart.products.find(
-						prod => prod.id === product.id
-					);
-					if (cartProductData) {
-						cartProducts.push({
-							productData: product,
-							qty: cartProductData.qty
-						});
-					}
-				});
-
+				return cart.getProducts();
+			})
+			.then(cartItems => {
 				res.render('shop/cart', {
 					pageTitle: 'Cart',
 					path: '/cart',
-					products: cartProducts
+					products: cartItems
 				});
+			})
+			.catch(err => {
+				console.error(err);
+				res.redirect('/error/product-not-found');
 			});
-		});
 	}
 
 	static postCart(req, res) {
-		const productId = req.body.productId.trim();
+		const productId = req.body.productId;
+		let fetchedCart;
+		let newQuantity;
 
-		Cart.addProduct(productId, err => {
-			if (err) {
-				return res.redirect(404, '/error/product-not-found');
-			}
+		req.user
+			.getCart()
+			.then(cart => {
+				if (!cart) {
+					throw new Error('Cart not found');
+				}
 
-			res.redirect('/cart');
-		});
+				fetchedCart = cart;
+
+				return cart.getProducts({ where: { id: productId } });
+			})
+			.then(products => {
+				let product;
+
+				if (products.length) {
+					product = products[0];
+				}
+
+				if (product) {
+					// Update quantity
+					newQuantity = product.cartItem.quantity + 1;
+					return product;
+				}
+
+				return Product.findByPk(productId);
+			})
+			.then(product => {
+				return fetchedCart.addProduct(product, {
+					through: { quantity: newQuantity }
+				});
+			})
+			.then(() => {
+				res.redirect('/cart');
+			})
+			.catch(err => {
+				console.error(err);
+				res.redirect('/error/product-not-found');
+			});
 	}
 
 	static postDeleteCart(req, res) {
 		const productId = req.body.productId;
 
-		Cart.deleteProduct(productId, err => {
-			if (err) {
-				return res.redirect(404, '/error/product-not-found');
-			}
-
-			res.redirect('/cart');
-		});
+		req.user
+			.getCart()
+			.then(cart => {
+				return cart.getProducts({ where: { id: productId } });
+			})
+			.then(products => {
+				const product = products[0];
+				return product.cartItem.destroy();
+			})
+			.then(() => {
+				res.redirect('/cart');
+			})
+			.catch(err => {
+				console.error(err);
+				res.redirect('/err/product-not-found');
+			});
 	}
 
 	static getOrders(req, res, next) {

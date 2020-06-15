@@ -16,12 +16,13 @@ export class AdminController {
 		const price = +req.body.price;
 		const description = req.body.description;
 
-		Product.create({
-			title,
-			imageUrl,
-			price,
-			description
-		})
+		req.user
+			.createProduct({
+				title,
+				imageUrl,
+				price,
+				description
+			})
 			.then(() => {
 				res.redirect('/products');
 			})
@@ -39,9 +40,12 @@ export class AdminController {
 
 		const productId = req.params.productId;
 
-		Product.findByPk(productId)
-			.then(result => {
-				if (!result) {
+		req.user
+			.getProducts({ where: { id: productId } })
+			.then(products => {
+				const product = products[0];
+
+				if (!product) {
 					throw new Error('Product not found.');
 				}
 
@@ -49,7 +53,7 @@ export class AdminController {
 					pageTitle: 'Edit Product',
 					path: '/admin/edit-product',
 					editing: editMode,
-					product: result
+					product
 				});
 			})
 			.catch(err => {
@@ -89,7 +93,8 @@ export class AdminController {
 	}
 
 	static getProducts(req, res) {
-		Product.findAll()
+		req.user
+			.getProducts()
 			.then(results => {
 				res.render('admin/products', {
 					products: results,
