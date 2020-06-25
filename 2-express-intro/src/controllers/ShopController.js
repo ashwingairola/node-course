@@ -64,11 +64,11 @@ export class ShopController {
 
 				return cart.getProducts();
 			})
-			.then(cartItems => {
+			.then(products => {
 				res.render('shop/cart', {
 					pageTitle: 'Cart',
 					path: '/cart',
-					products: cartItems
+					products
 				});
 			})
 			.catch(err => {
@@ -101,14 +101,20 @@ export class ShopController {
 				}
 
 				if (product) {
-					// Update quantity
-					newQuantity = product.cartItem.quantity + 1;
 					return product;
 				}
 
 				return Product.findByPk(productId);
 			})
 			.then(product => {
+				// Update quantity
+				if (product.cartItem) {
+					// Update quantity
+					newQuantity = product.cartItem.quantity + 1;
+				} else {
+					newQuantity = 1;
+				}
+
 				return fetchedCart.addProduct(product, {
 					through: { quantity: newQuantity }
 				});
@@ -143,11 +149,57 @@ export class ShopController {
 			});
 	}
 
-	static getOrders(req, res, next) {
-		res.render('shop/orders', {
-			pageTitle: 'Orders',
-			path: '/orders'
-		});
+	static getOrders(req, res) {
+		req.user
+			.getOrders({ include: Product })
+			.then(orders => {
+				console.log(orders);
+				res.render('shop/orders', {
+					pageTitle: 'Orders',
+					path: '/orders',
+					orders
+				});
+			})
+			.catch(err => {
+				console.error(err);
+				res.redirect('/error/product-not-found');
+			});
+	}
+
+	static postOrder(req, res) {
+		let fetchedCart;
+
+		req.user
+			.getCart()
+			.then(cart => {
+				fetchedCart = cart;
+				return cart.getProducts();
+			})
+			.then(products => {
+				return req.user
+					.createOrder()
+					.then(order => {
+						return order.addProduct(
+							products.map(product => {
+								product.orderItem = {
+									quantity: product.cartItem.quantity
+								};
+
+								return product;
+							})
+						);
+					})
+					.catch(err => {
+						console.error(err);
+						res.redirect('/error/product-not-found');
+					});
+			})
+			.then(() => fetchedCart.setProducts(null))
+			.then(() => res.redirect('/orders'))
+			.catch(err => {
+				console.error(err);
+				res.redirect('/error/product-not-found');
+			});
 	}
 
 	static getCheckout(req, res, next) {

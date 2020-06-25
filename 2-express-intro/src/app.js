@@ -14,6 +14,8 @@ import { Product } from './models/Product.js';
 import { User } from './models/User.js';
 import { Cart } from './models/Cart.js';
 import { CartItem } from './models/CartItem.js';
+import { Order } from './models/Order.js';
+import { OrderItem } from './models/OrderItem.js';
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -56,6 +58,9 @@ User.hasMany(Product);
 User.hasOne(Cart);
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: OrderItem });
 
 SEQUELIZE.sync({
 	// force: true

@@ -12,4 +12,11 @@ export class ErrorController {
 			path: ''
 		});
 	}
+
+	static getOrderError(req, res) {
+		res.render('error/order-error', {
+			pageTitle: 'Order Error',
+			path: ''
+		});
+	}
 }
