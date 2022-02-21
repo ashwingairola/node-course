@@ -8,7 +8,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "npm run start:dev",
-		"start:dev": "nodemon -r dotenv/config src/app.js dotenv_config_path=./config/.env.dev",
+		"start:dev": "nodemon -r dotenv/config src/app.js dotenv_config_path=./.env",
 		"prettier:all": "prettier --write \"**/*.(js|pug|html|css)\" --plugin=@prettier/plugin-pug --plugin-search-dir=node_modules"
 	},
 	"author": "",
